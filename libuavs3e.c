@@ -165,6 +165,7 @@ static int uavs3e_init(AVCodecContext *avctx)
     ec->avs3_cfg.rc_crf             = ec->baseCRF;
     ec->avs3_cfg.rc_type            = ec->rc_type;
     ec->avs3_cfg.i_period           = ec->intra_period / 16 * 16;
+    ec->avs3_cfg.close_gop          = ec->close_gop;
 
     if (avctx->bit_rate) {
         ec->avs3_cfg.rc_type = 2;
