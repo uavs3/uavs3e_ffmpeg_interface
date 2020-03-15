@@ -89,13 +89,11 @@ static void uavs3e_set_default_param(enc_cfg_t *param)
     memset(param, 0, sizeof(enc_cfg_t));
 
     param->qp                  =  23;
-    param->fps_num             =  50;
-    param->fps_den             =   1;
     param->i_period            =  48;
-    param->bit_depth_input     =   8;
     param->bit_depth_internal  =   8;
     param->use_pic_sign        =   0;
     param->max_b_frames        =  15;
+    param->close_gop           =   0;
     param->amvr_enable         =   1;
     param->affine_enable       =   1;
     param->smvd_enable         =   1;
@@ -115,6 +113,8 @@ static void uavs3e_set_default_param(enc_cfg_t *param)
     param->chroma_format       =   1;
     param->filter_cross_patch  =   1;
     param->colocated_patch     =   0;
+    param->patch_width         =   0;
+    param->patch_height        =   0;
     param->ctu_size            = 128;
     param->min_cu_size         =   4;
     param->max_part_ratio      =   8;
@@ -125,6 +125,7 @@ static void uavs3e_set_default_param(enc_cfg_t *param)
     param->max_dt_size         =  64;
     param->qp_offset_cb        =   0;
     param->qp_offset_cr        =   0;
+    param->speed_level         =   0;
     param->wpp_threads         =   1;
     param->frm_threads         =   1;
     param->rc_type             =   0;
@@ -164,13 +165,16 @@ static int uavs3e_init(AVCodecContext *avctx)
     ec->avs3_cfg.qp                 = ec->baseQP;
     ec->avs3_cfg.rc_crf             = ec->baseCRF;
     ec->avs3_cfg.rc_type            = ec->rc_type;
-    ec->avs3_cfg.i_period           = ec->intra_period / 16 * 16;
+    ec->avs3_cfg.i_period           = ec->intra_period;
     ec->avs3_cfg.close_gop          = ec->close_gop;
+    ec->avs3_cfg.speed_level        = ec->speed_level;
 
     if (avctx->bit_rate) {
         ec->avs3_cfg.rc_type = 2;
         ec->avs3_cfg.rc_bitrate = avctx->bit_rate / 1000;
         ec->avs3_cfg.rc_max_bitrate = ec->avs3_cfg.rc_bitrate * 2;
+        ec->avs3_cfg.rc_min_qp =  16;
+        ec->avs3_cfg.rc_max_qp =  63;
     }
 
     av_log(NULL, AV_LOG_INFO, "uavs3e cfg: %dx%d %d/%dfps gop:%d\n", ec->avs3_cfg.pic_width, ec->avs3_cfg.pic_height,
