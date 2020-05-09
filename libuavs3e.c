@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -84,63 +84,10 @@ typedef struct UAVS3EContext {
     int rc_type;
 } UAVS3EContext;
 
-static void uavs3e_set_default_param(enc_cfg_t *param)
-{  
-    memset(param, 0, sizeof(enc_cfg_t));
-
-    param->qp                  =  23;
-    param->i_period            =  48;
-    param->bit_depth_internal  =   8;
-    param->use_pic_sign        =   0;
-    param->max_b_frames        =  15;
-    param->close_gop           =   0;
-    param->amvr_enable         =   1;
-    param->affine_enable       =   1;
-    param->smvd_enable         =   1;
-    param->use_deblock         =   1;
-    param->num_of_hmvp         =   8;
-    param->ipf_flag            =   1;
-    param->tscpm_enable        =   1;
-    param->umve_enable         =   1;
-    param->emvr_enable         =   1;
-    param->dt_enable           =   1;
-    param->wq_enable           =   0;
-    param->sao_enable          =   1;
-    param->alf_enable          =   1;
-    param->sectrans_enable     =   1;
-    param->pbt_enable          =   1;
-    param->dqp_enable          =   0;
-    param->chroma_format       =   1;
-    param->filter_cross_patch  =   1;
-    param->colocated_patch     =   0;
-    param->patch_width         =   0;
-    param->patch_height        =   0;
-    param->ctu_size            = 128;
-    param->min_cu_size         =   4;
-    param->max_part_ratio      =   8;
-    param->max_split_times     =   6;
-    param->min_qt_size         =   8;
-    param->max_bt_size         = 128;
-    param->max_eqt_size        =  64;
-    param->max_dt_size         =  64;
-    param->qp_offset_cb        =   0;
-    param->qp_offset_cr        =   0;
-    param->speed_level         =   0;
-    param->wpp_threads         =   1;
-    param->frm_threads         =   1;
-    param->rc_type             =   0;
-    param->rc_bitrate          =   0;
-    param->rc_max_bitrate      =   0;
-    param->rc_crf              =  34;
-    param->rc_min_qp           =  16;
-    param->rc_max_qp           =  63;
-	
-}
-
 static int uavs3e_init(AVCodecContext *avctx)
 {
     UAVS3EContext *ec = avctx->priv_data;
-    uavs3e_set_default_param(&ec->avs3_cfg);
+    uavs3e_load_default_cfg(&ec->avs3_cfg);
 
     if (avctx->pix_fmt == AV_PIX_FMT_YUV420P) {
         ec->avs3_cfg.bit_depth_input    = 8;
